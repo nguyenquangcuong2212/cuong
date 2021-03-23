@@ -1,1 +1,63 @@
-abc
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+$("div[id*='question_']").on("click",function(){
+   var cauhoi = $(this).find( "div.media-body").find("div > pre");
+   var dap1 = $(this).find("label:nth-child(1) > div");
+   var dap2 = $(this).find("label:nth-child(2) > div");
+   var dap3 = $(this).find("label:nth-child(3) > div");
+   var dap4 = $(this).find("label:nth-child(4) > div");
+   
+  // console.log("cauhoi:" + htmlEntities($(cauhoi).text()));
+   //console.log(dap1.text());
+   //console.log(dap2.text());
+  // console.log(dap3.text());
+  // console.log(dap4.text());
+   $.ajax({
+        url: "https://api.npoint.io/41e1bb430092b1d10309",
+        contentType: "application/json", // Not to set any content header
+        type: "GET",
+        success: function (data) {
+			var j = 0;
+			var s = Object.keys(data).length;
+			var check = false;
+			for (j; j < s; j++){
+				//console.log("dap an tra ve: "+data[j].comment);
+				//console.log("cau hoi tra ve" + data[j].content.replace("<p>","").replace("\n","").replace("</p>","").trim());
+				var arr = data[j].comment.split("~");
+				if (check == false) {
+					for (k = 0; k < arr.length; k++){
+						var rs = arr[k].replace("<p>","").replace("\n","").replace("</p>","").trim();
+						var rs_ch = data[j].content.replace("<p>","").replace("\n","").replace("</p>","").trim();
+						if ( rs == dap1.text().trim() && htmlEntities($(cauhoi).text().trim()) == rs_ch) {
+							//console.log("dap an dung: " + dap1.text());
+							$(dap1).css('color','rgb(130 130 130)');
+							check = true;
+						}
+						if (rs == dap2.text().trim() && htmlEntities($(cauhoi).text()) == rs_ch) {
+							//console.log("dap an dung: " + dap2.text());
+							$(dap2).css('color','rgb(130 130 130)');
+							check = true;
+						}
+						if (rs == dap3.text().trim() && htmlEntities($(cauhoi).text()) == rs_ch) {
+							//console.log("dap an dung: " + dap3.text());
+							$(dap3).css('color','rgb(130 130 130)');
+							check = true;
+						}
+						if (rs == dap4.text().trim() && htmlEntities($(cauhoi).text()) == rs_ch) {
+							//console.log("dap an dung: " + dap4.text());
+							$(dap4).css('color','rgb(130 130 130)');
+							check = true;
+						}
+					}	
+				} else {
+					check = false;
+				    break;
+				}					
+			}
+        }
+    })
+})
+
+
